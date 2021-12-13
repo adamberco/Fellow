@@ -94,6 +94,7 @@ async function login(username, password) {
 async function externalLogin(username, fullname, imgUrl,googleUser,
   fbUser) {
   try {
+    if (!username) username = fullname
     const user = await httpService.post('auth/externalLogin', { username, fullname, imgUrl,googleUser,
       fbUser });
     console.log('Got User:', user);

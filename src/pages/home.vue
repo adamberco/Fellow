@@ -1,6 +1,6 @@
 <template>
   <section class="home-page" v-if="boards">
-    <app-header class="blue-header" />
+    <app-header class="blue-header"  @addBoard="onAddBoard=true"/>
     <section class="home">
       <div class="menu">
         <nav>

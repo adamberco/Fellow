@@ -63,8 +63,8 @@
     <div v-show="card.members.length" class="card-members-preview">
       <avatar
         v-for="member in card.members"
-        :key="member.id"
-        :username="member.fullname"
+        :key="member._id"
+        :username="member.fullname || member.username"
         :size="28"
         :lighten="200"
         :src="member.imgUrl"
@@ -108,7 +108,8 @@ export default {
       // doneTodos: 0
     };
   },
-  mounted() {
+  created() {
+    console.log(this.card);
     // this.height = this.$refs[this.card.id].clientHeight + 'px';
   },
   methods: {
@@ -204,6 +205,7 @@ export default {
       return todos;
     },
     user(){
+      console.log(this.$store.getters.user);
 return this.$store.getters.user
     },
     dateClass() {
