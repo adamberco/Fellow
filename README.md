@@ -8,4 +8,4 @@ backend is on a different repository, built with: nodejs, express, mongodb and s
 
 <br>
 
-<img src="https://res.cloudinary.com/or21321/image/upload/v1658842448/minesweeper_fssk4y.png"/>
+<img src="https://res.cloudinary.com/or21321/image/upload/v1658842448/minesweeper_fssk4y.png](https://res.cloudinary.com/oshra/image/upload/v1668505264/Screenshot_2022-11-15_114009_zc61ch.png"/>
