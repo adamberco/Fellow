@@ -1,4 +1,4 @@
-<p>Deployed to Heroku: https://project-fellow.herokuapp.com/</p>
+<p>Deployed to Render: https://fellow.onrender.com/</p>
 
 <h2>Fellow</h2>
 
