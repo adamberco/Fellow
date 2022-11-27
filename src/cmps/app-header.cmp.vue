@@ -26,9 +26,24 @@
           spellcheck="false"
           type="search"
           placeholder="Search..."
-          value
+          @input="checkInput"
+          v-model="searchInput"
         />
       </div>
+      <div class="search-modal" v-show="openSearch">
+        <div class="search-header">Boards</div>
+        <router-link
+          :to="{ name: 'board', params: { boardId: board._id } }"
+          class="search-item"
+          v-for="board in searchedBoards"
+          :key="board._id"
+        >
+          <!-- <div class="search-item" v-for="board in boards" :key="board._id"> -->
+          <span class="bgc-item" :style="styleToShow(board)"></span
+          ><span class="item-title">{{ board.title }}</span>
+        </router-link>
+      </div>
+
       <button class="header-bell" :class="notify" @click="toggleNotification">
         <span>
           <svg width="24" height="32" focusable="false" viewBox="0 0 24 24">
@@ -46,7 +61,11 @@
         :showPopup="showNotifyPopup"
         :activities="$store.getters.getActivities"
       />
-      <div class="user-section" @click="showUserPopup = !showUserPopup" v-if="user">
+      <div
+        class="user-section"
+        @click="showUserPopup = !showUserPopup"
+        v-if="user"
+      >
         <avatar
           :username="user.fullname"
           :size="32"
@@ -54,7 +73,11 @@
           :src="user.imgUrl"
           :title="`${user.fullname} (${user.username})`"
         ></avatar>
-        <user-popup v-show="showUserPopup" :user="user" @closePopup="showUserPopup = false"></user-popup>
+        <user-popup
+          v-show="showUserPopup"
+          :user="user"
+          @closePopup="showUserPopup = false"
+        ></user-popup>
       </div>
     </div>
   </header>
@@ -68,13 +91,14 @@ import notificationPopup from "../cmps/notification-popup.cmp.vue";
 // import { focus } from "vue-focus";
 import addBoard from "@/cmps/add-board.cmp.vue";
 
-
 export default {
   // directives: { focus },
   data() {
     return {
       showUserPopup: false,
       showNotifyPopup: false,
+      openSearch: false,
+      searchInput: "",
     };
   },
   methods: {
@@ -82,8 +106,21 @@ export default {
       this.showNotifyPopup = !this.showNotifyPopup;
       this.$store.commit({ type: "resetNotification" });
     },
-    onAddBoard(){
-this.$emit('addBoard')
+    onAddBoard() {
+      this.$emit("addBoard");
+    },
+    checkInput(ev) {
+      this.openSearch = ev.target.value ? true : false;
+    },
+    styleToShow(board) {
+      if (!board.style) return;
+      if (board.style.imgUrl)
+        return {
+          backgroundImage: `url("${board.style.imgUrl}")`,
+        };
+      return {
+        backgroundColor: board.style.bgColor,
+      };
     },
   },
   computed: {
@@ -92,14 +129,23 @@ this.$emit('addBoard')
     },
     notify() {
       return this.$store.getters.getNotificationCnt > 0 ? "bell-notify" : "";
-    }
+    },
+    boards() {
+      return this.$store.getters.boards;
+    },
+    searchedBoards() {
+      if (!this.boards) return;
+      return this.boards.filter((board) =>
+        board.title.toLowerCase().includes(this.searchInput.toLowerCase())
+      );
+    },
   },
   components: {
     logo,
     Avatar,
     userPopup,
     notificationPopup,
-    addBoard
-  }
+    addBoard,
+  },
 };
 </script>
