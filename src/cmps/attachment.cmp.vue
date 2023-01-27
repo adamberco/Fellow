@@ -54,19 +54,6 @@
         </a>
       </span>
     </p>
-    <!-- <section class="card-popup" v-show="openEdit">
-      <section class="popup-header">
-        <div>
-          <span @click.stop="openEdit=false" class="close-popup icon-md icon-close"></span>
-        </div>
-        <h4>Edit attachment</h4>
-      </section>
-      <form @submit.stop.prevent="editAttach">
-        <label>Title</label>
-        <input type="text" value="Checklist" v-model=" attachToEdit" />
-        <button class="submit">Add</button>
-      </form>
-    </section>-->
   </section>
 </template>
 
@@ -83,15 +70,6 @@ export default {
       type: Object,
     },
   },
-  data() {
-    return {
-      // openEdit: false,
-      // attachToEdit: null
-    };
-  },
-  created() {
-    // this.attachToEdit = this.attachment;
-  },
   methods: {
     openEdit() {
       this.$emit("openEdit", this.attachment);
@@ -105,7 +83,6 @@ export default {
     },
     deleteAttach() {
       this.$emit("deleteAttach", this.attachment);
-      // console.log(this.attachment);
     },
     async makeCover() {
       const fac = new FastAverageColor();
@@ -115,13 +92,10 @@ export default {
         bgColor: color.rgba,
         isDark: color.isDark,
       };
-      this.$emit("makeCover", style);
-      // console.log(this.attachment);
+      this.$emit("toggleCover", style);
     },
     removeCover() {
-      // console.log('emiting');
-      this.$emit("removeCover");
-      // console.log(this.attachment);
+      this.$emit("toggleCover");
     },
   },
   computed: {
@@ -141,10 +115,6 @@ export default {
           return this.attachment.href.includes(".com") ? "" : "LINK";
         default:
           return "";
-        // case "text/javascript":
-        //   return "JS";
-        // case "text/html":
-        //   return "html";
       }
     },
     timeSince() {
