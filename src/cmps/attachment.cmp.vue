@@ -79,7 +79,7 @@ export default {
       var url = this.attachment.href;
       if (!url.includes("https://") && this.attachment.type !== "img") url = "https://" + url;
       console.log('url ',url);
-      window.open(url);
+      window.open(url, '_blank');
     },
     deleteAttach() {
       this.$emit("deleteAttach", this.attachment);
