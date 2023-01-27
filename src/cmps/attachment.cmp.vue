@@ -1,5 +1,5 @@
 <template>
-  <section @click="openLink" target="_blank" class="attachment-list">
+  <section @click="openLink" class="attachment-list">
     <a class="attach-photo" :style="bgImg">
       <span
         class="icon"
@@ -13,7 +13,7 @@
           attachment.name || attachment.href
         }}</span>
       </span>
-      <a @click="openLink" target="_blank" class="attach-open">
+      <a @click="openLink" class="attach-open">
         <span class="icon-sm icon-external"></span>
       </a>
       <span class="info-wrapper">
@@ -77,8 +77,8 @@ export default {
     openLink() {
       if (!this.attachment.href) return;
       var url = this.attachment.href;
-      if (!url.includes("https://") && !this.attachment.type === "img")
-        url = "https://" + url;
+      if (!url.includes("https://") && this.attachment.type !== "img") url = "https://" + url;
+      console.log('url ',url);
       window.open(url);
     },
     deleteAttach() {
