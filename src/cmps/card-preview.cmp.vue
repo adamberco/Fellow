@@ -6,9 +6,7 @@
     @click="showDetails"
     v-if="card"
   >
-    <!-- <button v-show="isQuick" @click.stop="isQuick = false">close</button> -->
     <div class="cover-img" v-show="card.style" :style="getCover"></div>
-    <!-- <div> -->
     <span class="card-wrapper" @click.stop.prevent>
       <span
         v-for="label in getLabels"
@@ -28,16 +26,6 @@
     <section class="card-title">
       <p :ref="card.id">{{ card.title }}</p>
     </section>
-    <!-- <section class="edit-title" v-if="isQuick">
-      <textarea
-        v-focus="isQuick"
-        @focus="$event.target.select()"
-        ref="text"
-        :style="{ height: height }"
-        @input="checkHeight"
-        v-model="cardToEdit.title"
-      ></textarea>
-//    </section>-->
     <section class="card-icons">
       <div class="icon-wrapper" v-if="card.isWatch">
         <span class="icon-sm icon-watch badge"></span>
@@ -75,52 +63,37 @@
 </template>
 
 <script>
-import { focus } from 'vue-focus';
-import Avatar from 'vue-avatar';
-import { Container, Draggable } from 'vue-smooth-dnd';
-import { utilService } from '../services/util.service.js';
-import { userService } from '../services/user.service';
+import { focus } from "vue-focus";
+import Avatar from "vue-avatar";
+import { Container, Draggable } from "vue-smooth-dnd";
+import { utilService } from "../services/util.service.js";
 
 export default {
   directives: { focus },
   props: {
     card: {
-      type: Object,
+      type: Object
     },
     list: {
-      type: Object,
+      type: Object
     },
     labelsState: {
-      type: Boolean,
-    },
+      type: Boolean
+    }
   },
   data() {
     return {
       islabelHover: false,
-      // isQuick: false,
       pos: null,
       cardToEdit: {
-        title: '',
+        title: ""
       },
-      // height: '',
-      doIconsOverflow: false,
-      // todos: 0,
-      // doneTodos: 0
+      doIconsOverflow: false
     };
   },
-  created() {
-    console.log(this.card);
-    // this.height = this.$refs[this.card.id].clientHeight + 'px';
-  },
   methods: {
-    // checkHeight() {
-    //   if (!this.isQuick || !this.$refs.text) console.log('N');
-    //   // console.log("text", this.$refs.text.scrollHeight);
-    //   this.height = this.$refs.text.scrollHeight + 'px';
-    // },
     showDetails() {
-      // if (this.isQuick) return;
-      this.$router.push(this.$route.path + '/c/' + this.card.id);
+      this.$router.push(this.$route.path + "/c/" + this.card.id);
     },
     formatDate(dueDate) {
       var date = dueDate.getDate();
@@ -133,70 +106,48 @@ export default {
       const activityText = this.card.isComplete
         ? `marked the due date complete on `
         : `marked the due date not complete on`;
-      console.log('activityText', activityText);
+      console.log("activityText", activityText);
       const activity = {
-        id: 'act' + utilService.makeId(),
+        id: "act" + utilService.makeId(),
         txt: activityText,
         createdAt: Date.now(),
         byMember: {
-          imgUrl: this.user.imgUrl ? this.user.imgUrl : '',
+          imgUrl: this.user.imgUrl ? this.user.imgUrl : "",
           fullname: this.user.fullname,
           _id: this.user._id
         },
         listTitle: this.list.title,
         card: {
           id: this.card.id,
-          title: this.card.title,
-        },
+          title: this.card.title
+        }
       };
       try {
         await this.$store.dispatch({
-          type: 'updateCard',
+          type: "updateCard",
           boardId: this.boardId,
           list: JSON.parse(JSON.stringify(this.list)),
           card: JSON.parse(JSON.stringify(this.card)),
-          activity,
+          activity
         });
       } catch (err) {
-        console.log('cant update card', err);
+        console.log("cant update card", err);
       }
     },
     onLabelClick() {
       this.$store.commit({
-        type: 'toggleLabel',
-        labelsState: this.labelsState,
+        type: "toggleLabel",
+        labelsState: this.labelsState
       });
-    },
-    // openQuick(ev) {
-    //   // console.log(ev);
-    //   this.pos = {
-    //     x: ev.clientX,
-    //     y: ev.clientY,
-    //   };
-    //   this.cardToEdit = JSON.parse(JSON.stringify(this.card));
-    //   this.isQuick = true;
-    // },
-    // getShouldAcceptDrop(index, src, payload) {
-    //   // console.log("index", index);
-    //   // console.log("src", src);
-    //   // console.log("payload", payload);
-    // },
-    // getChildPayload(detachList) {
-    //   // console.log((index) => detachList.members[index]);
-    //   // return (index) => detachList.cards[index];
-    // },
-    // onMemberDrop(targetList, dropResult) {
-    //   const { addedIndex, removedIndex, payload } = dropResult;
-    //   console.log(dropResult, targetList);
-    // },
+    }
   },
   computed: {
     todos() {
       var todos = 0;
       if (this.card.checklists && this.card.checklists.length) {
-        this.card.checklists.forEach((checklist) => {
+        this.card.checklists.forEach(checklist => {
           if (checklist.todos && checklist.todos.length) {
-            checklist.todos.forEach((todo) => {
+            checklist.todos.forEach(todo => {
               todos++;
             });
           }
@@ -204,22 +155,24 @@ export default {
       }
       return todos;
     },
-    user(){
+    user() {
       console.log(this.$store.getters.user);
-return this.$store.getters.user
+      return this.$store.getters.user;
     },
     dateClass() {
       if (!this.card.dueDate) return;
-      if (this.card.isComplete) return 'done';
+      if (this.card.isComplete) return "done";
       if (+new Date(this.card.dueDate) - Date.now() > 86400000) return;
-      return +new Date(this.card.dueDate) - Date.now() <= 0 ? 'over-due' : 'soon';
+      return +new Date(this.card.dueDate) - Date.now() <= 0
+        ? "over-due"
+        : "soon";
     },
     doneTodos() {
       var doneTodos = 0;
       if (this.card.checklists && this.card.checklists.length) {
-        this.card.checklists.forEach((checklist) => {
+        this.card.checklists.forEach(checklist => {
           if (checklist.todos && checklist.todos.length) {
-            checklist.todos.forEach((todo) => {
+            checklist.todos.forEach(todo => {
               if (todo.isDone) doneTodos++;
             });
           }
@@ -230,10 +183,12 @@ return this.$store.getters.user
     getLabels() {
       const allLabels = this.$store.getters.labels;
       const labelIds = this.card.labelIds;
-      return labelIds.map((lId) => allLabels.find((label) => label.id === lId));
+      return labelIds.map(
+        lId => allLabels.find(label => label.id === lId) || false
+      );
     },
     setLabelClass() {
-      let classes = `preview-label${this.labelsState ? '' : '-close'}`;
+      let classes = `preview-label${this.labelsState ? "" : "-close"}`;
       return classes;
     },
 
@@ -243,12 +198,12 @@ return this.$store.getters.user
         return this.formatDate(dueDate);
       }
 
-      return this.formatDate(dueDate) + ', ' + dueDate.getFullYear();
+      return this.formatDate(dueDate) + ", " + dueDate.getFullYear();
     },
     ChecklistNum() {
       var doneTodos = 0;
-      this.card.checklists.forEach((checklist) => {
-        checklist.todos.forEach((todo) => {
+      this.card.checklists.forEach(checklist => {
+        checklist.todos.forEach(todo => {
           if (todo.isDone) doneTodos++;
           else undoneTodos++;
         });
@@ -261,23 +216,66 @@ return this.$store.getters.user
       if (!this.card.style.img) {
         return {
           backgroundColor,
-          height: '32px',
-          minHeight: '32px',
+          height: "32px",
+          minHeight: "32px"
         };
       }
       return {
-        height: '163.58px',
+        height: "163.58px",
         backgroundColor,
-        backgroundImage: `url("${this.card.style.img}")`,
+        backgroundImage: `url("${this.card.style.img}")`
       };
     },
     boardId() {
       return this.$store.getters.boardId;
-    },
+    }
   },
 
-  components: { Avatar, Container, Draggable },
+  components: { Avatar, Container, Draggable }
 };
+
+// TEMPLATE
+// <button v-show="isQuick" @click.stop="isQuick = false">close</button>
+//  <section class="edit-title" v-if="isQuick">
+//       <textarea
+//         v-focus="isQuick"
+//         @focus="$event.target.select()"
+//         ref="text"
+//         :style="{ height: height }"
+//         @input="checkHeight"
+//         v-model="cardToEdit.title"
+//       ></textarea>
+//       </section>
+
+// METHODS
+// checkHeight() {
+//   if (!this.isQuick || !this.$refs.text) console.log('N');
+//   // console.log("text", this.$refs.text.scrollHeight);
+//   this.height = this.$refs.text.scrollHeight + 'px';
+// },
+// openQuick(ev) {
+//   // console.log(ev);
+//   this.pos = {
+//     x: ev.clientX,
+//     y: ev.clientY,
+//   };
+//   this.cardToEdit = JSON.parse(JSON.stringify(this.card));
+//   this.isQuick = true;
+// },
+// getShouldAcceptDrop(index, src, payload) {
+//   // console.log("index", index);
+//   // console.log("src", src);
+//   // console.log("payload", payload);
+// },
+// getChildPayload(detachList) {
+//   // console.log((index) => detachList.members[index]);
+//   // return (index) => detachList.cards[index];
+// },
+// onMemberDrop(targetList, dropResult) {
+//   const { addedIndex, removedIndex, payload } = dropResult;
+//   console.log(dropResult, targetList);
+// },
 </script>
 
-<style></style>
+
+

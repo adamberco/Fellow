@@ -1,6 +1,5 @@
 <template>
   <div id="app" :class="{ 'on-board': onBoard }" :style="appStyle">
-    <!-- <app-header :class="{ 'blue-header': !onBoard }" /> -->
     <router-view />
   </div>
 </template>
@@ -61,7 +60,6 @@ export default {
             console.log("problem with getting board", err);
           }
         }
-        // console.log(this.onBoard);
       },
       immediate: true
     }

@@ -204,5 +204,5 @@ function timeSince(timeStamp) {
 export const utilService = {
     makeId,
     getRandomInt,
-    timeSince
+    timeSince,
 }

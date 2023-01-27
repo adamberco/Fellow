@@ -18,6 +18,7 @@ Vue.use(infiniteScroll);
 Vue.use(LoaderPlugin, {
   client_id: '961995621272-60aj5sk5o9vlm2a68pqoqbtd32uo5ka3.apps.googleusercontent.com'
 });
+
 // import { library } from '@fortawesome/fontawesome-svg-core'
 // import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
 // import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
