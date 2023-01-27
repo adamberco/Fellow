@@ -18,7 +18,6 @@
           :style="{ backgroundColor: colorCode }"
           :class="{ 'selected-btn': isSelected(colorCode) }"
         ></button>
-        <!-- card.style && !card.style.img && card.style.bgColor ===colorCode -->
       </div>
       <label class="img-attachs">Attachments</label>
       <div class="attachments-container">
@@ -42,7 +41,6 @@
       </div>
       <div class="search-imgs action-btn" @click="openUnsplash">
         Search for photos
-        <!-- <button @click="openUnsplash">Search for photos</button> -->
       </div>
     </section>
     <section class="photo-search" v-show="showUnsplash">
@@ -213,7 +211,6 @@ export default {
     };
   },
   created() {
-    console.log("card", this.card);
     this.showUnsplash = false;
     this.previewImgs = this.imgs.slice(0, 6);
     if (this.card.style) {
@@ -224,7 +221,6 @@ export default {
   },
   methods: {
     isSelected(val) {
-      // console.log(val);
       if (!this.card.style) return;
       if (val.charAt(0) === "#") {
         return !this.card.style.img && this.card.style.bgColor === val
@@ -234,7 +230,6 @@ export default {
       return this.card.style.img === val ? true : false;
     },
     async loadMore() {
-      // console.log("loading");
       this.busy = true;
 
       try {
@@ -245,9 +240,7 @@ export default {
           page: ++this.page
         });
         this.searchResults.push(...this.$store.getters.getBgPhotos);
-        // console.log(this.searchResults.length);
         this.busy = false;
-        // console.log("done");
       } catch (err) {
         console.log("cant load next page", err);
       }
@@ -269,14 +262,14 @@ export default {
         style.img = val;
       }
 
-      this.$emit("makeCover", style);
+      this.$emit("toggleCover", style);
       if (putInPreview) this.putInPrev(val);
     },
     backgroundImg(url) {
       return { backgroundImage: `url("${url}")` };
     },
     removeCover() {
-      this.$emit("removeCover");
+      this.$emit("toggleCover");
     },
     closeCover() {
       // console.log("close");

@@ -12,7 +12,6 @@ export const userService = {
 };
 
 async function query(filterBy) {
-    console.log('filter userservice query', filterBy);
     try {
         return httpService.get('user/', filterBy);
     } catch (err) {

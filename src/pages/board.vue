@@ -119,7 +119,6 @@ export default {
       newListTitle: "",
       openBar: false,
       onAddBoard:false,
-      // dragging: false,
       showDashboard: false,
     };
   },
@@ -183,7 +182,6 @@ export default {
   },
   destroyed() {
     socketService.off("board pushed");
-    // socketService.terminate();
   },
   computed: {
     board() {
@@ -208,12 +206,8 @@ export default {
         haveUpdate,
       });
     },
-
     setAddList() {
       this.isAddList = true;
-      // console.log("board", this.board);
-
-      // this.$refs.titleInput.focus()
     },
     async addList() {
       const title = this.newListTitle;
@@ -228,7 +222,6 @@ export default {
           title,
           board: this.board,
         });
-        // this.isAddList = false;
       } catch (err) {
         console.log("cant add list", err);
       }
@@ -280,7 +273,7 @@ export default {
       let startX;
       let scrollLeft;
       slider.addEventListener("mousedown", (ev) => {
-        if (ev.path.length > 10) return;
+        if (ev.path?.length > 10) return;
         isDown = true;
         slider.classList.add("active");
         startX = ev.pageX - slider.offsetLeft;

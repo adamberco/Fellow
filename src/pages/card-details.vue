@@ -22,12 +22,10 @@
           <cover
             class="top-cover"
             v-if="showCoverMenu"
-            @makeCover="makeCover"
+            @toggleCover="toggleCover"
             :card="cardToEdit"
-            @removeCover="removeCover"
-            @closeCover="showCoverMenu = false"
+            @removeCover="toggleCover"
           ></cover>
-          <!-- :style="topCoverStyle" -->
         </section>
       </div>
 
@@ -97,14 +95,6 @@
               <div class="due-date" v-show="cardToEdit.dueDate">
                 <h3>Due date</h3>
                 <div class="due-date-body">
-                  <!-- <span
-                    class="check-box-container"
-                    :class="{
-                      checked: cardToEdit.isComplete,
-                      unCheck: !cardToEdit.isComplete,
-                    }"
-                  >-->
-                  <!-- <span class="checkbox"> -->
                   <input
                     id="cb"
                     type="checkbox"
@@ -164,8 +154,7 @@
             <div v-for="attachment in cardToEdit.attachments" :key="attachment.id">
               <attachment
                 :attachment="attachment"
-                @makeCover="makeCover"
-                @removeCover="removeCover"
+                @toggleCover="toggleCover"
                 @deleteAttach="deleteAttach"
                 @openEdit="openEdit"
                 :cardToEdit="cardToEdit"
@@ -204,24 +193,13 @@
               >{{ showActivities ? "Hide details" : "Show details" }}</button>
             </section>
             <div class="comment-box" @click="isComment = true">
-              <!-- <div
-              class="comment-box"
-              :class="{ onComment: isComment }"
-              @click="isComment = true"
-              >-->
-              <!-- <textarea
-                rows="1"
-                placeholder="Write a comment..."
-                @blur="isComment = false"
-              />-->
-              <!-- <textarea
-                rows="1"
-                placeholder="not yet developed..."
-                @blur="isComment = false"
-              />-->
               <button class="submit-btn">save</button>
               <div class="log" v-show="showActivities">
-                <div class="activity-item" v-for="(activity,idx) in activitiesToShow" :key="activity.id">
+                <div
+                  class="activity-item"
+                  v-for="(activity,idx) in activitiesToShow"
+                  :key="activity.id"
+                >
                   <activity-item :activity="activity" :idx="idx" :inCard="true" />
                 </div>
               </div>
@@ -286,9 +264,6 @@
                   <div @click.stop="openCheckList = false">
                     <span class="close-popup icon-md icon-close"></span>
                   </div>
-                  <!-- <button class="close-popup" @click.stop="openCheckList = false">
-                  x
-                  </button>-->
                   <h4>Add checklist</h4>
                 </section>
                 <form @submit.prevent="addCheckList">
@@ -340,9 +315,8 @@
               </button>
               <cover
                 v-if="showCoverMenu"
-                @makeCover="makeCover"
+                @toggleCover="toggleCover"
                 :card="cardToEdit"
-                @removeCover="removeCover"
                 @closeCover="showCoverMenu = false"
               ></cover>
             </section>
@@ -385,11 +359,9 @@ import addAttachment from "../cmps/add-attachment.cmp.vue";
 import attachment from "../cmps/attachment.cmp.vue";
 import cover from "../cmps/cover.cmp.vue";
 import activityItem from "../cmps/activity-item.cmp.vue";
-// import coverMenu from "../cmps/cover-menu.cmp.vue";
 import Avatar from "vue-avatar";
 import { utilService } from "../services/util.service.js";
 import checklist from "../cmps/checklist.cmp.vue";
-import { userService } from "../services/user.service.js";
 
 export default {
   data() {
@@ -420,7 +392,6 @@ export default {
     this.$refs.desc.innerText = this.cardToEdit.description
       ? this.cardToEdit.description
       : "";
-    // this.$refs.desc.innerText.select();
   },
   computed: {
     card() {
@@ -492,34 +463,16 @@ export default {
       const user = this.$store.getters.user;
       return this.cardToEdit.members.find(u => u._id === user._id);
     }
-    // topCoverStyle(){
-    //   return{top:'50px !important', left: 'unset'}
-    // }
   },
   methods: {
-    async removeCover() {
-      this.cardToEdit.style = null;
-      try {
-        const activityText = "removed cover from ";
-        console.log("activityText", activityText);
-        await this.updateCard(activityText);
-        this.showCoverMenu = false;
-      } catch (err) {
-        console.log("cant remove cover", err);
-      }
-    },
-    async makeCover(style) {
-      console.log("style", style);
-      // console.log(val);
-      // this.cardToEdit.color = color;
-      // this.cardToEdit.cover = val;
+    async toggleCover(style = null) {
       this.cardToEdit.style = style;
       try {
-        const activityText = "made cover to ";
-        console.log("activityText", activityText);
+        const activityText = style ? "made cover to " : "removed cover from ";
         await this.updateCard(activityText);
+        this.showCoverMenu = style ? true : false;
       } catch (err) {
-        console.log("cant make cover", err);
+        console.log("cant toggle cover", err);
       }
     },
     async updateAttach() {
@@ -588,7 +541,6 @@ export default {
       newAttach.id = "A" + utilService.makeId();
       this.cardToEdit.attachments.push(newAttach);
       try {
-        console.log("newAttach", newAttach);
         const activityText = `added ${newAttach.name ||
           newAttach.file ||
           newAttach.href} attachment to `;
@@ -602,7 +554,6 @@ export default {
       const activityText = `updated due date to `;
       this.updateCard(activityText);
     },
-    // async updateCard(ev, activityText) {
     async updateCard(activityText) {
       this.isEditDesc = false;
       const user = this.$store.getters.user;
@@ -629,9 +580,6 @@ export default {
           card: JSON.parse(JSON.stringify(this.cardToEdit)),
           activity
         });
-        // if (ev) ev.target.blur();
-        // this.$emit('reload')
-        // this.$router.matched[0].path.reload()
       } catch (err) {
         console.log("cant update card", err);
       }
@@ -649,12 +597,6 @@ export default {
         console.log("cant remove card", err);
       }
     },
-    // async changeComplete() {
-    //   this.cardToEdit.isComplete = !this.cardToEdit.isComplete;
-    //   const activityText = `marked the due date on ${this.card.title} complete `;
-    //   console.log("activityText", activityText);
-    //   await this.updateCard(activityText);
-    // },
     setEditDesc() {
       this.lastCardDesc = this.cardToEdit.description;
       this.isEditDesc = true;
@@ -711,7 +653,6 @@ export default {
     async updateMembers(members) {
       this.cardToEdit.members = members;
       const activityText = `updated members of `;
-      // console.log("activityText", activityText);
       await this.updateCard(activityText);
     },
     toggleLabels() {
@@ -733,7 +674,6 @@ export default {
     addAttachment,
     attachment,
     cover,
-    // coverMenu,
     cardMembers,
     Avatar,
     activityItem
