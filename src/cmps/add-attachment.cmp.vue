@@ -1,5 +1,5 @@
 <template>
-  <section class="card-popup attachment-popup">
+  <section class="card-popup attachment-popup" v-click-outside="close">
     <section class="popup-header">
       <div @click.stop="close">
         <span class="close-popup icon-md icon-close"></span>
@@ -42,7 +42,6 @@ export default {
         createdAt: '',
         type: '',
       },
-      //   imgUrls: [],
       isLoading: false,
     };
   },
@@ -51,23 +50,17 @@ export default {
       this.isLoading = true;
       try {
         let res = await uploadImg(ev);
-        //   this.imgUrls.push(res.url);
         this.newAttach.href = res.url;
         this.newAttach.type = 'img';
-        // console.log(this.imgUrls);
-        // console.log(res);
-        // this.$emit('onSaveImg', res.url)
         this.isLoading = false;
       } catch (err) {
         console.log('cant upload img'.err);
       }
     },
     close() {
+      console.log('here');
       this.$emit('close');
     },
-    // saveImg(imgUrl) {
-    //   this.imgUrls.push(imgUrl);
-    // },
     addAttach() {
       if (this.newAttach.href && !this.newAttach.type) {
         this.newAttach.type = 'link';
@@ -78,7 +71,6 @@ export default {
       this.resetAttach();
     },
     handleFileUpload() {
-      // console.log(this.$refs.file.files[0]);
       const file = this.$refs.file.files[0];
       this.newAttach.type = file.type;
       this.newAttach.file = file;
@@ -103,4 +95,3 @@ export default {
 };
 </script>
 
-<style></style>

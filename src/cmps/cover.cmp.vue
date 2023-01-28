@@ -1,5 +1,5 @@
 <template>
-  <section class="card-popup cover-popup">
+  <section class="card-popup cover-popup" v-click-outside="closeCover"  click.stop="">
     <section class="popup-header">
       <div @click.stop="closeCover">
         <span class="close-popup icon-md icon-close"></span>
@@ -39,7 +39,7 @@
           @click="makeCover(img.small)"
         ></button>
       </div>
-      <div class="search-imgs action-btn" @click="openUnsplash">
+      <div class="search-imgs action-btn" @click.stop="openUnsplash">
         Search for photos
       </div>
     </section>
@@ -71,7 +71,7 @@
               :key="img.regular"
               :class="{ 'selected-btn': isSelected(img.small) }"
               :style="backgroundImg(img.small)"
-              @click="makeCover(img.small, 'putInPreview')"
+              @click.stop="makeCover(img.small, 'putInPreview')"
             ></button>
           </div>
         </div>
@@ -272,7 +272,7 @@ export default {
       this.$emit("toggleCover");
     },
     closeCover() {
-      // console.log("close");
+      console.log("close");
       this.showSuggestions = true;
       this.showResults = false;
       this.isLoading = false;
@@ -302,6 +302,7 @@ export default {
       }
     },
     async openUnsplash() {
+      console.log('open');
       this.showUnsplash = true;
       this.showResults = false;
     },

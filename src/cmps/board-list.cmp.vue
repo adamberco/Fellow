@@ -17,7 +17,7 @@
       <button @click="listMenu = !listMenu">
         <span class="icon-sm icon-dots"> </span>
       </button>
-      <section class="card-popup list-popup" v-show="listMenu" @click.stop="">
+      <section class="card-popup list-popup" v-if="listMenu" @click.stop="" >
         <section class="popup-header">
           <div @click.stop="listMenu = false">
             <span class="close-popup icon-md icon-close"></span>

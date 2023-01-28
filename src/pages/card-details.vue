@@ -24,8 +24,9 @@
             v-if="showCoverMenu"
             @toggleCover="toggleCover"
             :card="cardToEdit"
-            @removeCover="toggleCover"
+            @closeCover="showCoverMenu = false"
           ></cover>
+            <!-- @removeCover="toggleCover" -->
         </section>
       </div>
 
@@ -245,7 +246,7 @@
               </button>
             </section>
             <card-labels
-              v-show="showLabels"
+              v-if="showLabels"
               @close="toggleLabels"
               :cardLabels="cardToEdit.labelIds"
               @update="updateLabels"
@@ -259,9 +260,13 @@
                   <span>Checklist</span>
                 </span>
               </button>
-              <section class="card-popup checklist-popup" v-show="openCheckList">
+              <section
+                class="card-popup checklist-popup"
+                v-if="openCheckList"
+                v-click-outside="closeChecklist"
+              >
                 <section class="popup-header">
-                  <div @click.stop="openCheckList = false">
+                  <div @click.stop="closeChecklist">
                     <span class="close-popup icon-md icon-close"></span>
                   </div>
                   <h4>Add checklist</h4>
@@ -298,10 +303,11 @@
                   <span class="icon-sm icon-attach"></span>Attachments
                 </span>
               </button>
+              <!-- v-click-outside="openAddAttach = false" -->
               <add-attachment
                 @addNewAttach="addNewAttach"
                 @close="openAddAttach = false"
-                v-show="openAddAttach"
+                v-if="openAddAttach"
               ></add-attachment>
             </section>
 
@@ -475,6 +481,9 @@ export default {
         console.log("cant toggle cover", err);
       }
     },
+    closeChecklist(){
+      this.openCheckList = false
+    },
     async updateAttach() {
       const idx = this.cardToEdit.attachments.findIndex(
         currAttach => currAttach.id === this.attachToEdit.id
@@ -522,7 +531,7 @@ export default {
       var ampm = hours >= 12 ? "PM" : "AM";
       hours = hours % 12;
       hours = hours ? hours : 12;
-      minutes = +((minutes+'').padStart(2,'0'));
+      minutes = +(minutes + "").padStart(2, "0");
       var strTime = " at " + hours + ":" + minutes + " " + ampm;
       return strTime;
     },

@@ -1,5 +1,5 @@
 <template>
-  <section class="card-popup label-popup">
+  <section class="card-popup label-popup" v-click-outside="onClose">
     <section v-show="!isEditLabel && !isNewLabel">
       <header class="popup-header">
         <h4>Labels</h4>
