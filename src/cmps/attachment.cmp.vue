@@ -1,17 +1,15 @@
 <template>
   <section @click="openLink" class="attachment-list">
     <a class="attach-photo" :style="bgImg">
-      <span
-        class="icon"
-        :class="{ 'attach-icon': attachment.type !== 'img' && !typeToShow }"
-        >{{ typeToShow }}</span
-      >
+      <span class="icon" :class="{'attach-icon': attachment.type !== 'img'}"></span>
     </a>
     <p class="attachment-details">
       <span>
-        <span class="name" v-if="attachment.href">{{
+        <span class="name" v-if="attachment.href">
+          {{
           attachment.name || attachment.href
-        }}</span>
+          }}
+        </span>
       </span>
       <a @click="openLink" class="attach-open">
         <span class="icon-sm icon-external"></span>
@@ -41,16 +39,14 @@
               !cardToEdit.style || cardToEdit.style.img !== attachment.href
             "
             @click.stop="makeCover"
-            >Make cover</span
-          >
+          >Make cover</span>
           <span
             v-show="
               cardToEdit.style && cardToEdit.style.img === attachment.href
             "
             @click.stop="removeCover"
             class="remove-cover"
-            >Remove cover</span
-          >
+          >Remove cover</span>
         </a>
       </span>
     </p>
@@ -64,11 +60,11 @@ import { utilService } from "../services/util.service.js";
 export default {
   props: {
     attachment: {
-      type: Object,
+      type: Object
     },
     cardToEdit: {
-      type: Object,
-    },
+      type: Object
+    }
   },
   methods: {
     openEdit() {
@@ -77,9 +73,9 @@ export default {
     openLink() {
       if (!this.attachment.href) return;
       var url = this.attachment.href;
-      if (!url.includes("https://") && this.attachment.type !== "img") url = "https://" + url;
-      console.log('url ',url);
-      window.open(url, '_blank');
+      if (!url.includes("https://") && this.attachment.type !== "img")
+        url = "https://" + url;
+      window.open(url, "_blank");
     },
     deleteAttach() {
       this.$emit("deleteAttach", this.attachment);
@@ -90,13 +86,13 @@ export default {
       const style = {
         img: this.attachment.href,
         bgColor: color.rgba,
-        isDark: color.isDark,
+        isDark: color.isDark
       };
       this.$emit("toggleCover", style);
     },
     removeCover() {
       this.$emit("toggleCover");
-    },
+    }
   },
   computed: {
     attachToEdit() {
@@ -107,21 +103,10 @@ export default {
         return { backgroundImage: `url("${this.attachment.href}")` };
       }
     },
-    typeToShow() {
-      switch (this.attachment.type) {
-        case "img":
-          return "";
-        case "link":
-          return this.attachment.href.includes(".com") ? "" : "LINK";
-        default:
-          return "";
-      }
-    },
     timeSince() {
       return utilService.timeSince(this.attachment.createdAt);
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style></style>
