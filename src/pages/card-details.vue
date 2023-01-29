@@ -476,7 +476,7 @@ export default {
       try {
         const activityText = style ? "made cover to " : "removed cover from ";
         await this.updateCard(activityText);
-        this.showCoverMenu = style ? true : false;
+        this.showCoverMenu = false;
       } catch (err) {
         console.log("cant toggle cover", err);
       }
