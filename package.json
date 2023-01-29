@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --dest ../backend/public"
+    "build": "vue-cli-service build --dest ../Fellow-backend/public"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
